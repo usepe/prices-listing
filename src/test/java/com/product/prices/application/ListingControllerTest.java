@@ -3,6 +3,9 @@ package com.product.prices.application;
 import com.product.prices.PricesListingsApplication;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -22,49 +26,85 @@ public class ListingControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Test
-    @DisplayName("Test 1: petición a las 10:00 del día 2020/06/14 del producto 35455 para la brand 1")
-    void itShouldReturnDataGivenCertainInputs() throws Exception {
-        var dateApplied = LocalDateTime.of(2020, 6, 14, 10, 0);
-        var productId = "35455";
-        var brandId = "1";
-
-        mvc.perform(get("/prices")
-                .contentType(MediaType.APPLICATION_JSON)
-                        .queryParam("brandId", brandId)
-                        .queryParam("productId", productId)
-                        .queryParam("dateApplied", dateApplied.toString()))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.productId").value("35455"))
-                .andExpect(jsonPath("$.brandId").value("1"))
-                .andExpect(jsonPath("$.priceList").value("1"))
-                .andExpect(jsonPath("$.startDate").value("2020-06-14T00:00:00"))
-                .andExpect(jsonPath("$.endDate").value("2020-12-31T23:59:59"))
-                .andExpect(jsonPath("$.currency").value("EUR"))
-                .andExpect(jsonPath("$.price").value(35.5));
+    public static Stream<Arguments> provideInputForPriceCheck() {
+        return Stream.of(
+                Arguments.of(
+                        new Input(
+                                "1",
+                                "35455",
+                                LocalDateTime.of(2020, 6, 14, 10, 0).toString()
+                        ),
+                        new ExpectedOutput(
+                                "35455",
+                                "1",
+                                "1",
+                                "2020-06-14T00:00:00",
+                                "2020-12-31T23:59:59",
+                                "EUR",
+                                35.5
+                        )
+                ),
+                Arguments.of(
+                        new Input(
+                                "1",
+                                "35455",
+                                LocalDateTime.of(2020, 6, 14, 16, 0).toString()
+                        ),
+                        new ExpectedOutput(
+                                "35455",
+                                "1",
+                                "2",
+                                "2020-06-14T15:00:00",
+                                "2020-06-14T18:30:00",
+                                "EUR",
+                                25.45
+                        )
+                )
+        );
     }
 
-    @Test
-    @DisplayName("Test 2: petición a las 16:00 del día 14 del producto 35455 para la brand 1")
-    void itShouldReturnDataForADifferentPetition() throws Exception {
-        var dateApplied = LocalDateTime.of(2020, 6, 14, 16, 0);
-        var productId = "35455";
-        var brandId = "1";
-
+    @ParameterizedTest
+    @MethodSource("provideInputForPriceCheck")
+    @DisplayName("Tests different inputs")
+    void itShouldReturnDataGivenCertainInputs(Input input,
+                                              ExpectedOutput expected) throws Exception {
         mvc.perform(get("/prices")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .queryParam("brandId", brandId)
-                        .queryParam("productId", productId)
-                        .queryParam("dateApplied", dateApplied.toString()))
+                        .queryParam("brandId", input.brandId)
+                        .queryParam("productId", input.productId)
+                        .queryParam("dateApplied", input.dateApplied))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.productId").value("35455"))
-                .andExpect(jsonPath("$.brandId").value("1"))
-                .andExpect(jsonPath("$.priceList").value("2"))
-                .andExpect(jsonPath("$.startDate").value("2020-06-14T15:00:00"))
-                .andExpect(jsonPath("$.endDate").value("2020-06-14T18:30:00"))
-                .andExpect(jsonPath("$.currency").value("EUR"))
-                .andExpect(jsonPath("$.price").value(25.45));
+                .andExpect(jsonPath("$.productId").value(expected.productId))
+                .andExpect(jsonPath("$.brandId").value(expected.brandId))
+                .andExpect(jsonPath("$.priceList").value(expected.priceList))
+                .andExpect(jsonPath("$.startDate").value(expected.startDate))
+                .andExpect(jsonPath("$.endDate").value(expected.endDate))
+                .andExpect(jsonPath("$.currency").value(expected.currency))
+                .andExpect(jsonPath("$.price").value(expected.price));
+    }
+
+    record Input(String brandId,
+                 String productId,
+                 String dateApplied) {
+        @Override
+        public String toString() {
+            return "Petición de precio de producto " + productId + " de la brand " + brandId + " en fecha " + dateApplied;
+        }
+    }
+
+    record ExpectedOutput(
+            String productId,
+            String brandId,
+            String priceList,
+            String startDate,
+            String endDate,
+            String currency,
+            Double price
+    ) {
+        @Override
+        public String toString() {
+            return "Lista " + priceList + " en " + currency + " " + price;
+        }
     }
 }
