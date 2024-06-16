@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-data-table-prices
+      author: usepe
+      changes:
+        - loadData:
+            file: db/data/prices.csv
+            tableName: prices

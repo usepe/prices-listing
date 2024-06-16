@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -44,5 +43,28 @@ public class ListingControllerTest {
                 .andExpect(jsonPath("$.endDate").value("2020-12-31T23:59:59"))
                 .andExpect(jsonPath("$.currency").value("EUR"))
                 .andExpect(jsonPath("$.price").value(35.5));
+    }
+
+    @Test
+    @DisplayName("Test 2: petición a las 16:00 del día 14 del producto 35455 para la brand 1")
+    void itShouldReturnDataForADifferentPetition() throws Exception {
+        var dateApplied = LocalDateTime.of(2020, 6, 14, 16, 0);
+        var productId = "35455";
+        var brandId = "1";
+
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("brandId", brandId)
+                        .queryParam("productId", productId)
+                        .queryParam("dateApplied", dateApplied.toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.productId").value("35455"))
+                .andExpect(jsonPath("$.brandId").value("1"))
+                .andExpect(jsonPath("$.priceList").value("2"))
+                .andExpect(jsonPath("$.startDate").value("2020-06-14T15:00:00"))
+                .andExpect(jsonPath("$.endDate").value("2020-06-14T18:30:00"))
+                .andExpect(jsonPath("$.currency").value("EUR"))
+                .andExpect(jsonPath("$.price").value(25.45));
     }
 }

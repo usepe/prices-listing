@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter-table-prices
+      author: usepe
+      changes:
+        - addColumn:
+            tableName: prices
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  beforeColumn: brand_id
+                  constraints:
+                    primaryKey: true
+                  autoIncrement: true
