@@ -39,4 +39,29 @@ class DomainPricesServiceTest {
 
         assertEquals(productTwo, actual);
     }
+
+    @Test
+    void shouldReturnOnlyProductPricesThatAreBetweenTheGivenDate() {
+        var productOne = new BrandedProductPrice("1", "1", "1",
+                LocalDateTime.of(2020, 6, 14, 0, 0),
+                LocalDateTime.of(2020, 6, 16, 0, 0),
+                "EUR", BigDecimal.ONE, 0);
+
+        var productTwo = new BrandedProductPrice("1", "1", "1",
+                LocalDateTime.of(2020, 6, 17, 0, 0),
+                LocalDateTime.of(2020, 6, 18, 0, 0),
+                "EUR", BigDecimal.TEN, 1);
+
+        var listOfProducts = List.of(productOne, productTwo);
+
+        when(repository.listProductPrices("1", "1")).thenReturn(listOfProducts);
+
+        var brandId = "1";
+        var productId = "1";
+        var dateApplied = LocalDateTime.of(2020, 6, 14, 10, 0);
+
+        var actual = service.productPriceOnDate(brandId, productId, dateApplied);
+
+        assertEquals(productOne, actual);
+    }
 }

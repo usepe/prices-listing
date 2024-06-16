@@ -20,6 +20,7 @@ public class DomainPricesService implements PricesService {
     public BrandedProductPrice productPriceOnDate(String brandId, String productId, LocalDateTime dateApplied) {
         return repository.listProductPrices(brandId, productId)
                 .stream()
+                .filter(price -> price.startDate().isBefore(dateApplied) && price.endDate().isAfter(dateApplied))
                 .max(Comparator.comparing(BrandedProductPrice::priority))
                 .orElseThrow(PriceNotFoundException::new);
     }
