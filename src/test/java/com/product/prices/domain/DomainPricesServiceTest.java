@@ -1,5 +1,6 @@
 package com.product.prices.domain;
 
+import com.product.prices.domain.exception.PriceNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -63,5 +65,30 @@ class DomainPricesServiceTest {
         var actual = service.productPriceOnDate(brandId, productId, dateApplied);
 
         assertEquals(productOne, actual);
+    }
+
+    @Test
+    void shouldThrowAnExceptionWhenCannotFindAProductPrice() {
+        var listOfProducts = List.<BrandedProductPrice>of();
+
+        when(repository.listProductPrices("1", "1")).thenReturn(listOfProducts);
+
+        var brandId = "1";
+        var productId = "1";
+        var dateApplied = LocalDateTime.of(2020, 6, 14, 10, 0);
+
+        assertThrows(PriceNotFoundException.class, () -> service.productPriceOnDate(brandId, productId, dateApplied));
+    }
+
+    @Test
+    void shouldThrowAnExceptionWhenNullDateProvided() {
+        var listOfProducts = List.<BrandedProductPrice>of();
+
+        when(repository.listProductPrices("1", "1")).thenReturn(listOfProducts);
+
+        var brandId = "1";
+        var productId = "1";
+
+        assertThrows(PriceNotFoundException.class, () -> service.productPriceOnDate(brandId, productId, null));
     }
 }

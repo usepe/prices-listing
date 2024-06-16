@@ -2,6 +2,7 @@ package com.product.prices.application;
 
 import com.product.prices.PricesListingsApplication;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -132,6 +133,24 @@ public class ListingControllerTest {
                 .andExpect(jsonPath("$.endDate").value(expected.endDate))
                 .andExpect(jsonPath("$.currency").value(expected.currency))
                 .andExpect(jsonPath("$.price").value(expected.price));
+    }
+
+    @Test
+    @DisplayName("Tests not found")
+    void itShouldReturnA404NotFoundWhenCannotFindAMatchingPrice() throws Exception {
+        var dateApplied = LocalDateTime.of(2023, 8, 26, 0, 0).toString();
+
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("brandId", TEST_BRAND)
+                        .queryParam("productId", TEST_PRODUCT)
+                        .queryParam("dateApplied", dateApplied))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.brandId").value(TEST_BRAND))
+                .andExpect(jsonPath("$.productId").value(TEST_PRODUCT))
+                .andExpect(jsonPath("$.dateApplied").value(dateApplied))
+                .andExpect(jsonPath("$.message").value("Price not found for given product"));
     }
 
     record Input(String brandId,

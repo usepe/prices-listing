@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.Objects;
 
 @Service
 public class DomainPricesService implements PricesService {
@@ -20,7 +21,7 @@ public class DomainPricesService implements PricesService {
     public BrandedProductPrice productPriceOnDate(String brandId, String productId, LocalDateTime dateApplied) {
         return repository.listProductPrices(brandId, productId)
                 .stream()
-                .filter(price -> price.startDate().isBefore(dateApplied) && price.endDate().isAfter(dateApplied))
+                .filter(price -> Objects.nonNull(dateApplied) && price.startDate().isBefore(dateApplied) && price.endDate().isAfter(dateApplied))
                 .max(Comparator.comparing(BrandedProductPrice::priority))
                 .orElseThrow(PriceNotFoundException::new);
     }

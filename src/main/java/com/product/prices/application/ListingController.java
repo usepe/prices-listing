@@ -1,11 +1,11 @@
 package com.product.prices.application;
 
-import com.product.prices.domain.BrandedProductPrice;
 import com.product.prices.domain.PricesService;
+import com.product.prices.domain.exception.PriceNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.AccessType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -44,5 +44,19 @@ public class ListingController {
                     brandedProductPrice.price()
             );
         }
+    }
+
+    @ControllerAdvice
+    class ListingControllerExceptionHandler {
+        @ResponseStatus(HttpStatus.NOT_FOUND)
+        @ExceptionHandler(PriceNotFoundException.class)
+        public @ResponseBody ErrorInfo handleNotFound(HttpServletRequest req, Exception ex) {
+            return new ErrorInfo(req.getParameter("brandId"),
+                    req.getParameter("productId"),
+                    req.getParameter("dateApplied"),
+                    ex.getMessage());
+        }
+
+        record ErrorInfo(String brandId, String productId, String dateApplied, String message) {}
     }
 }
