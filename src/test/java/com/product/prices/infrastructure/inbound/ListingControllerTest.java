@@ -1,4 +1,4 @@
-package com.product.prices.application;
+package com.product.prices.infrastructure.inbound;
 
 import com.product.prices.PricesListingsApplication;
 import org.junit.jupiter.api.DisplayName;

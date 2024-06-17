@@ -1,4 +1,4 @@
-package com.product.prices.infrastructure;
+package com.product.prices.infrastructure.outbound;
 
 import com.product.prices.infrastructure.outbound.database.BrandedProductPrice;
 import com.product.prices.infrastructure.outbound.database.SpringDataH2PricesRepository;

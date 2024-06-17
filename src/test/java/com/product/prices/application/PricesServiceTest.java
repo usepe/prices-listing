@@ -1,6 +1,5 @@
-package com.product.prices.domain;
+package com.product.prices.application;
 
-import com.product.prices.application.PricesService;
 import com.product.prices.domain.exception.PriceNotFoundException;
 import com.product.prices.domain.model.BrandedProductPrice;
 import com.product.prices.domain.repository.PricesRepository;
@@ -15,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class DomainPricesServiceTest {
+class PricesServiceTest {
     private final PricesRepository repository = mock(PricesRepository.class);
 
-    private final PricesService service = new PricesService(repository);
+    private final com.product.prices.application.PricesService service = new com.product.prices.application.PricesService(repository);
 
     @Test
     void shouldReturnPriceWithHigherPriorityForAGivenProduct() {
