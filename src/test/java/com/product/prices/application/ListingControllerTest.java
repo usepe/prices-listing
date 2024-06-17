@@ -206,7 +206,7 @@ public class ListingControllerTest {
                         .queryParam("brandId", TEST_BRAND)
                         .queryParam("productId", "1")
                         .queryParam("dateApplied", LocalDateTime.of(2020, 6, 14, 10, 0).toString()))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 

@@ -19,9 +19,8 @@ public class DomainPricesService implements PricesService {
 
     @Override
     public BrandedProductPrice productPriceOnDate(String brandId, String productId, LocalDateTime dateApplied) {
-        return repository.listProductPrices(brandId, productId)
+        return repository.listProductPrices(brandId, productId, dateApplied)
                 .stream()
-                .filter(price -> Objects.nonNull(dateApplied) && price.startDate().isBefore(dateApplied) && price.endDate().isAfter(dateApplied))
                 .max(Comparator.comparing(BrandedProductPrice::priority))
                 .orElseThrow(PriceNotFoundException::new);
     }

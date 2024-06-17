@@ -5,6 +5,7 @@ import com.product.prices.domain.PricesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -17,8 +18,8 @@ public class H2PricesRepository implements PricesRepository {
     }
 
     @Override
-    public List<BrandedProductPrice> listProductPrices(String brandId, String productId) {
-        return pricesRepository.findByBrandIdAndProductId(brandId, productId)
+    public List<BrandedProductPrice> listProductPrices(String brandId, String productId, LocalDateTime dateApplied) {
+        return pricesRepository.findByPriceApplied(brandId, productId, dateApplied)
                 .stream()
                 .map(product -> new BrandedProductPrice(
                         product.brandId(),

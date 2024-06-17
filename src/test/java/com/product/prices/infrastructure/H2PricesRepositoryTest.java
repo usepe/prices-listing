@@ -17,7 +17,11 @@ class H2PricesRepositoryTest {
 
     @Test
     void itShouldMapTheProductProperly() {
-        when(springDataH2PricesRepository.findByBrandIdAndProductId("1", "1"))
+        var brandId = "1";
+        var productId = "1";
+        var dateApplied = LocalDateTime.of(2020, 8, 26, 10, 0);
+
+        when(springDataH2PricesRepository.findByPriceApplied(brandId, productId, dateApplied))
                 .thenReturn(List.of(new BrandedProductPrice(
                         1,
                         "1",
@@ -30,7 +34,8 @@ class H2PricesRepositoryTest {
                         0
                 )));
 
-        var actual = repository.listProductPrices("1", "1");
+
+        var actual = repository.listProductPrices(brandId, productId, dateApplied);
 
         var expected = List.of(new com.product.prices.domain.BrandedProductPrice(
                 "1",

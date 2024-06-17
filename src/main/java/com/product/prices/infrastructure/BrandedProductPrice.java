@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "prices")
@@ -48,6 +49,7 @@ public class BrandedProductPrice {
                                String currency,
                                BigDecimal price,
                                int priority) {
+        this.id = id;
         this.brandId = brandId;
         this.productId = productId;
         this.priceList = priceList;
@@ -88,5 +90,33 @@ public class BrandedProductPrice {
 
     public int priority() {
         return priority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BrandedProductPrice that = (BrandedProductPrice) o;
+        return id == that.id && priority == that.priority && Objects.equals(brandId, that.brandId) && Objects.equals(productId, that.productId) && Objects.equals(priceList, that.priceList) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(currency, that.currency) && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, brandId, productId, priceList, startDate, endDate, currency, price, priority);
+    }
+
+    @Override
+    public String toString() {
+        return "BrandedProductPrice{" +
+                "id=" + id +
+                ", brandId='" + brandId + '\'' +
+                ", productId='" + productId + '\'' +
+                ", priceList='" + priceList + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", currency='" + currency + '\'' +
+                ", price=" + price +
+                ", priority=" + priority +
+                '}';
     }
 }
