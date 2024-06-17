@@ -30,7 +30,7 @@ Serves as a bridge between the domain and DBs.
 ```
 GET http://localhost:8080/prices?brandId=<BRAND_ID>&productId=<PRODUCT_ID>&dateApplied=<DATE_APPLIED>
 ```
-There are no required params, but they will rise a 404 for any combination that does not give a valid return value.
+All params are required.
 
 Get with Example data:
 ```

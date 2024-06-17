@@ -136,21 +136,78 @@ public class ListingControllerTest {
     }
 
     @Test
-    @DisplayName("Tests not found")
-    void itShouldReturnA404NotFoundWhenCannotFindAMatchingPrice() throws Exception {
-        var dateApplied = LocalDateTime.of(2023, 8, 26, 0, 0).toString();
+    @DisplayName("BrandId should be present")
+    void itShouldRaiseAnErrorOnBrandIdNotPresent() throws Exception {
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
 
+    @Test
+    @DisplayName("BrandId should be valid")
+    void itShouldRaiseAnErrorOnBrandIdNotValid() throws Exception {
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("brandId", "invalid_brand"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Product should be present")
+    void itShouldRaiseAnErrorOnProductIdNotPresent() throws Exception {
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("brandId", TEST_BRAND))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Product should be valid")
+    void itShouldRaiseAnErrorOnProductIdNotValid() throws Exception {
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("brandId", TEST_BRAND)
+                        .queryParam("productId", "invalid_product"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Date applied should be present")
+    void itShouldRaiseAnErrorOnDateAppliedNotPresent() throws Exception {
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("brandId", TEST_BRAND)
+                        .queryParam("productId", TEST_PRODUCT))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Date applied should be valid")
+    void itShouldRaiseAnErrorOnDateAppliedNotValid() throws Exception {
         mvc.perform(get("/prices")
                         .contentType(MediaType.APPLICATION_JSON)
                         .queryParam("brandId", TEST_BRAND)
                         .queryParam("productId", TEST_PRODUCT)
-                        .queryParam("dateApplied", dateApplied))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.brandId").value(TEST_BRAND))
-                .andExpect(jsonPath("$.productId").value(TEST_PRODUCT))
-                .andExpect(jsonPath("$.dateApplied").value(dateApplied))
-                .andExpect(jsonPath("$.message").value("Price not found for given product"));
+                        .queryParam("dateApplied", "invalid_date"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    @DisplayName("Not found on valid input but no match")
+    void itShouldRaiseAnErrorOnValidInputButNoMatch() throws Exception {
+        mvc.perform(get("/prices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("brandId", TEST_BRAND)
+                        .queryParam("productId", "1")
+                        .queryParam("dateApplied", LocalDateTime.of(2020, 6, 14, 10, 0).toString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     record Input(String brandId,
