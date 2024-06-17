@@ -6,12 +6,13 @@ List prices for products for a given date.
 
 - Spring Boot v3.3.0
 - Java 17
+- Maven
 
 ### Run
 
 On a terminal, from the project root run:
 ```
-./gradlew bootRun
+./mvnw spring-boot:run
 ```
 
 ## Project Structure
