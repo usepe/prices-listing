@@ -1,4 +1,6 @@
-package com.product.prices.domain;
+package com.product.prices.domain.repository;
+
+import com.product.prices.domain.model.BrandedProductPrice;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.product.prices.infrastructure;
 
+import com.product.prices.infrastructure.outbound.database.BrandedProductPrice;
+import com.product.prices.infrastructure.outbound.database.SpringDataH2PricesRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

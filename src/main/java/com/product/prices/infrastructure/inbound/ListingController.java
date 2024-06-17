@@ -1,12 +1,13 @@
-package com.product.prices.application;
+package com.product.prices.infrastructure.inbound;
 
-import com.product.prices.domain.PricesService;
+import com.product.prices.domain.service.PricesService;
 import com.product.prices.domain.exception.PriceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class ListingController {
             String currency,
             BigDecimal price
     ) {
-        public static BrandedProductPrice of(com.product.prices.domain.BrandedProductPrice brandedProductPrice) {
+        public static BrandedProductPrice of(com.product.prices.domain.model.BrandedProductPrice brandedProductPrice) {
             return new BrandedProductPrice(
                     brandedProductPrice.brandId(),
                     brandedProductPrice.productId(),

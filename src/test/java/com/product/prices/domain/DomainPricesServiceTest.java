@@ -1,6 +1,9 @@
 package com.product.prices.domain;
 
+import com.product.prices.application.PricesService;
 import com.product.prices.domain.exception.PriceNotFoundException;
+import com.product.prices.domain.model.BrandedProductPrice;
+import com.product.prices.domain.repository.PricesRepository;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -15,7 +18,7 @@ import static org.mockito.Mockito.when;
 class DomainPricesServiceTest {
     private final PricesRepository repository = mock(PricesRepository.class);
 
-    private final DomainPricesService service = new DomainPricesService(repository);
+    private final PricesService service = new PricesService(repository);
 
     @Test
     void shouldReturnPriceWithHigherPriorityForAGivenProduct() {

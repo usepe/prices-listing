@@ -1,5 +1,8 @@
 package com.product.prices.infrastructure;
 
+import com.product.prices.infrastructure.outbound.database.BrandedProductPrice;
+import com.product.prices.infrastructure.outbound.database.H2PricesRepository;
+import com.product.prices.infrastructure.outbound.database.SpringDataH2PricesRepository;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -37,7 +40,7 @@ class H2PricesRepositoryTest {
 
         var actual = repository.listProductPrices(brandId, productId, dateApplied);
 
-        var expected = List.of(new com.product.prices.domain.BrandedProductPrice(
+        var expected = List.of(new com.product.prices.domain.model.BrandedProductPrice(
                 "1",
                 "1",
                 "1",

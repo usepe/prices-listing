@@ -1,4 +1,4 @@
-package com.product.prices.infrastructure;
+package com.product.prices.infrastructure.outbound.database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,47 +1,20 @@
-package com.product.prices.infrastructure;
-
-import jakarta.persistence.*;
+package com.product.prices.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
-@Table(name = "prices")
 public class BrandedProductPrice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private final String brandId;
+    private final String productId;
+    private final String priceList;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
+    private final String currency;
+    private final BigDecimal price;
+    private final int priority;
 
-    @Column(name = "brand_id")
-    private String brandId;
-
-    @Column(name = "product_id")
-    private String productId;
-
-    @Column(name = "price_list")
-    private String priceList;
-
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
-
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
-
-    @Column(name = "currency")
-    private String currency;
-
-    @Column(name = "price")
-    private BigDecimal price;
-
-    @Column(name = "priority")
-    private int priority;
-
-    public BrandedProductPrice() {
-    }
-
-    public BrandedProductPrice(long id,
-                               String brandId,
+    public BrandedProductPrice(String brandId,
                                String productId,
                                String priceList,
                                LocalDateTime startDate,
@@ -49,7 +22,6 @@ public class BrandedProductPrice {
                                String currency,
                                BigDecimal price,
                                int priority) {
-        this.id = id;
         this.brandId = brandId;
         this.productId = productId;
         this.priceList = priceList;
@@ -97,19 +69,18 @@ public class BrandedProductPrice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BrandedProductPrice that = (BrandedProductPrice) o;
-        return id == that.id && priority == that.priority && Objects.equals(brandId, that.brandId) && Objects.equals(productId, that.productId) && Objects.equals(priceList, that.priceList) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(currency, that.currency) && Objects.equals(price, that.price);
+        return priority == that.priority && Objects.equals(brandId, that.brandId) && Objects.equals(productId, that.productId) && Objects.equals(priceList, that.priceList) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(currency, that.currency) && Objects.equals(price, that.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, brandId, productId, priceList, startDate, endDate, currency, price, priority);
+        return Objects.hash(brandId, productId, priceList, startDate, endDate, currency, price, priority);
     }
 
     @Override
     public String toString() {
         return "BrandedProductPrice{" +
-                "id=" + id +
-                ", brandId='" + brandId + '\'' +
+                "brandId='" + brandId + '\'' +
                 ", productId='" + productId + '\'' +
                 ", priceList='" + priceList + '\'' +
                 ", startDate=" + startDate +

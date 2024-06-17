@@ -14,16 +14,20 @@ On a terminal, from the project root run:
 ./gradlew bootRun
 ```
 
-## Architecture
+## Project Structure
 
-### Application
-Contains rest controllers that communicates with the domain via services.
-
-### Domain
-Contains domain services and models, that are the ones in charge of handling business rules and communicate with the infrastructure.
-
-### Infrastructure
-Serves as a bridge between the domain and DBs.
+```
+|-application
+|-domain
+|---exception
+|---model
+|---repository
+|---service
+|-infrastructure
+|---inbound
+|---outbound
+|-----database
+```
 
 ## Endpoints
 

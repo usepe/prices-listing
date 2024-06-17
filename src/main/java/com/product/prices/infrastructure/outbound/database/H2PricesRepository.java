@@ -1,7 +1,7 @@
-package com.product.prices.infrastructure;
+package com.product.prices.infrastructure.outbound.database;
 
-import com.product.prices.domain.BrandedProductPrice;
-import com.product.prices.domain.PricesRepository;
+import com.product.prices.domain.model.BrandedProductPrice;
+import com.product.prices.domain.repository.PricesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
